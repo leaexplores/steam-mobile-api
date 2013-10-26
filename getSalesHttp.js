@@ -54,7 +54,7 @@ http.get(options, function (response) {
 		dailyDealJSON = responseJSON[iCpt];
 		// Correct the prices provided by steam.
 		// Formatting 4099 to 40,99$  per example.
-		dailyDealJSON.items[0].original_price = formatPrice(JSON.stringify(dailyDealJSON.items[0].original_price));
+		dailyDealJSON.items[0].original_price = formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 		
 
 		// Format prices and compute discounted price in Specials
