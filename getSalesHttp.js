@@ -35,28 +35,31 @@ function writeWholeJSON(str, res) {
 		dailyDealJSON = responseJSON[iCpt];
 		// Correct the prices provided by steam.
 		// Formatting 4099 to 40,99$  per example.
-		dailyDealJSON.items[0].final_price = formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
+		// With Discount % to show in app (19%) 10,33$ Per example
+		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 		
 
 		// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
 		{
+		// Add % to the discounted prices
+		//responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
 		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		responseJSON.specials.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
-		// Add % to the discounted prices
-		responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		// With Discount % to show in app (19%) 10,33$ Per example
+		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
 		}
 
 		// Format for most popular
 				// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
 		{
+		// Add % to the discounted prices
+		//responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
 		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
-		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
-		// Add % to the discounted prices
-		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
+		// With Discount % to show in app (19%) 10,33$ Per example
+		responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
@@ -86,7 +89,7 @@ function writeDailyDealJSON(str, res) {
 		dailyDealJSON = responseJSON[iCpt];
 		// Correct the prices provided by steam.
 		// Formatting 4099 to 40,99$  per example.
-		dailyDealJSON.items[0].final_price = formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
+		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 
 		// Build the JSON Object	
 		var dealsJSON = {
@@ -111,11 +114,12 @@ function writeSpecialsJSON(str, res) {
 		// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
 		{
-		// Add , and $ to the prices.
-		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		responseJSON.specials.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
 		// Add % to the discounted prices
 		responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		// Add , and $ to the prices.
+		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
+		// With Discount % to show in app (19%) 10,33$ Per example
+		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + ") " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
@@ -140,11 +144,12 @@ function writeMostPopularJSON(str,res) {
 		// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
 		{
-		// Add , and $ to the prices.
-		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
-		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		// Add % to the discounted prices
 		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
+		// Add , and $ to the prices.
+		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
+		// With Discount % to show in app (19%) 10,33$ Per example
+		responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + ") " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
