@@ -53,10 +53,10 @@ function writeWholeJSON(str, res) {
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
 		{
 		// Add , and $ to the prices.
-		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
+		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		// Add % to the discounted prices
-		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
 		}
 
 		// Build the JSON Object	
@@ -141,10 +141,10 @@ function writeMostPopularJSON(str,res) {
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
 		{
 		// Add , and $ to the prices.
-		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
+		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		// Add % to the discounted prices
-		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
 		}
 
 		// Build the JSON Object	
