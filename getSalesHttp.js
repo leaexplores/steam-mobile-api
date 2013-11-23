@@ -48,10 +48,22 @@ function writeWholeJSON(str, res) {
 		responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
 		}
 
+		// Format for most popular
+				// Format prices and compute discounted price in Specials
+		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
+		{
+		// Add , and $ to the prices.
+		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
+		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+		// Add % to the discounted prices
+		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		}
+
 		// Build the JSON Object	
 		var dealsJSON = {
 			"dailyDeal": dailyDealJSON,
-			"specials": responseJSON.specials
+			"specials": responseJSON.specials,
+			"most_popular" : responseJSON.top_sellers
 		};
 		res.writeHead(200, {
 				"Content-Type": "application/json"
@@ -118,6 +130,35 @@ function writeSpecialsJSON(str, res) {
 		res.end();
 }
 
+function writeMostPopularJSON(str,res) {
+			var responseJSON;
+		// Parse my JSON bro.
+		responseJSON = JSON.parse(str);
+		// Finding the daily deal as there is a lot of sales!!
+		var iCpt = 0;
+
+		// Format prices and compute discounted price in Specials
+		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
+		{
+		// Add , and $ to the prices.
+		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
+		responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+		// Add % to the discounted prices
+		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		}
+
+		// Build the JSON Object	
+		var dealsJSON = {
+			"most_popular": responseJSON.top_sellers
+		};
+		res.writeHead(200, {
+				"Content-Type": "application/json"
+				});
+
+		res.write(JSON.stringify(dealsJSON));
+		res.end();
+}
+
 // Main program!
 var http = require('http');
 var url = require ('url');
@@ -150,6 +191,9 @@ http.get(options, function (response) {
 				break;
 			case '/special':
 				writeSpecialsJSON(str, res);
+			break;
+			case '/mostpopular':
+				writeMostPopularJSON(str,res);
 			break;
 			default:
 				res.write('Too bad 404');
