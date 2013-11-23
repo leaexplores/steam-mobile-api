@@ -48,6 +48,7 @@ function writeWholeJSON(str, res) {
 		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
 		// With Discount % to show in app (19%) 10,33$ Per example
 		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+
 		}
 
 		// Format for most popular
@@ -59,7 +60,10 @@ function writeWholeJSON(str, res) {
 		// Add , and $ to the prices.
 		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
 		// With Discount % to show in app (19%) 10,33$ Per example
-		responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+		if (JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) != "0")
+			responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+		else
+			responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
@@ -115,11 +119,11 @@ function writeSpecialsJSON(str, res) {
 		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
 		{
 		// Add % to the discounted prices
-		responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
+		//responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
 		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
 		// With Discount % to show in app (19%) 10,33$ Per example
-		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + ") " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
+		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
@@ -145,11 +149,14 @@ function writeMostPopularJSON(str,res) {
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
 		{
 		// Add % to the discounted prices
-		responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
+		//responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
 		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
 		// With Discount % to show in app (19%) 10,33$ Per example
-		responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + ") " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+		if (JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) != "0")
+			responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+		else
+			responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
 
 		// Build the JSON Object	
