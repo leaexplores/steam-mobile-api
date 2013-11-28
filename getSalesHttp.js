@@ -29,6 +29,7 @@ function writeWholeJSON(str, res) {
 		// Finding the daily deal as there is a lot of sales!!
 		var iCpt = 0;
 		var dailyDealJSON;
+		try {
 		while (responseJSON[iCpt].name != "Daily Deal") {
 		iCpt = iCpt + 1;
 		}
@@ -37,8 +38,9 @@ function writeWholeJSON(str, res) {
 		// Formatting 4099 to 40,99$  per example.
 		// With Discount % to show in app (19%) 10,33$ Per example
 		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
-		
+		} catch (err) {}
 
+		try {
 		// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
 		{
@@ -50,7 +52,9 @@ function writeWholeJSON(str, res) {
 		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
 
 		}
+		} catch (err) {}
 
+		try {
 		// Format for most popular
 				// Format prices and compute discounted price in Specials
 		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
@@ -65,6 +69,7 @@ function writeWholeJSON(str, res) {
 		else
 			responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
+		} catch (err) {}
 
 		// Build the JSON Object	
 		var dealsJSON = {
