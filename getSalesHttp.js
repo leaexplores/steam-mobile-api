@@ -29,6 +29,40 @@ function writeWholeJSON(str, res) {
 		// Finding the daily deal as there is a lot of sales!!
 		var iCpt = 0;
 		var dailyDealJSON;
+
+		var allSpecialsItemsJSON = [];
+		// Generate the specials in an new way !
+		// Get all the items with a discounted price and
+		// put them in the same JSONObject!
+		var nbItemsAllSpecialsJSON = 0;
+		try {
+			for (var item in responseJSON)
+			{
+				if (responseJSON[item].hasOwnProperty("items"))
+				{
+					for (pElements in responseJSON[item].items)
+					{
+						if (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0")
+						{
+							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
+							// Add , and $ to the prices.
+						        responseJSON[item].items[pElements].original_price = formatPrice(JSON.stringify(responseJSON[item].items[pElements].original_price))
+							// With Discount % to show in app (19%) 10,33$ Per example
+							responseJSON[item].items[pElements].final_price = "(" + JSON.stringify(responseJSON[item].items[pElements].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON[item].items[pElements].final_price))
+							allSpecialsItemsJSON.push(responseJSON[item].items[pElements]);
+
+					}
+
+					}
+				}
+			}
+		}
+		catch (err) {}
+
+		var allSpecialsJSON = {
+			"items": allSpecialsItemsJSON	
+		};
+
 		try {
 		while (responseJSON[iCpt].name != "Daily Deal") {
 		iCpt = iCpt + 1;
@@ -38,20 +72,6 @@ function writeWholeJSON(str, res) {
 		// Formatting 4099 to 40,99$  per example.
 		// With Discount % to show in app (19%) 10,33$ Per example
 		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
-		} catch (err) {}
-
-		try {
-		// Format prices and compute discounted price in Specials
-		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
-		{
-		// Add % to the discounted prices
-		//responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
-		// Add , and $ to the prices.
-		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		// With Discount % to show in app (19%) 10,33$ Per example
-		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
-
-		}
 		} catch (err) {}
 
 		try {
@@ -74,7 +94,7 @@ function writeWholeJSON(str, res) {
 		// Build the JSON Object	
 		var dealsJSON = {
 			"dailyDeal": dailyDealJSON,
-			"specials": responseJSON.specials,
+			"specials": allSpecialsJSON, //responseJSON.specials,
 			"most_popular" : responseJSON.top_sellers
 		};
 		res.writeHead(200, {
