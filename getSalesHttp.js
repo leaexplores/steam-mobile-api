@@ -35,7 +35,7 @@ function writeWholeJSON(str, res) {
 		// Get all the items with a discounted price and
 		// put them in the same JSONObject!
 		var nbItemsAllSpecialsJSON = 0;
-		//try {
+		try {
 			for (var item in responseJSON)
 			{
 				if (responseJSON[item].hasOwnProperty("items"))
@@ -56,6 +56,7 @@ function writeWholeJSON(str, res) {
 					}
 				}
 			}
+		catch (err) {}
 
 		var allSpecialsJSON = {
 			"items": allSpecialsItemsJSON	
@@ -70,20 +71,6 @@ function writeWholeJSON(str, res) {
 		// Formatting 4099 to 40,99$  per example.
 		// With Discount % to show in app (19%) 10,33$ Per example
 		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
-		} catch (err) {}
-
-		try {
-		// Format prices and compute discounted price in Specials
-		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
-		{
-		// Add % to the discounted prices
-		//responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
-		// Add , and $ to the prices.
-		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
-		// With Discount % to show in app (19%) 10,33$ Per example
-		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
-
-		}
 		} catch (err) {}
 
 		try {
