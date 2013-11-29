@@ -56,6 +56,7 @@ function writeWholeJSON(str, res) {
 					}
 				}
 			}
+		}
 		catch (err) {}
 
 		var allSpecialsJSON = {
