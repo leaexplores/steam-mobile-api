@@ -48,7 +48,8 @@ function writeWholeJSON(str, res) {
 							// Add , and $ to the prices.
 						        responseJSON[item].items[pElements].original_price = formatPrice(JSON.stringify(responseJSON[item].items[pElements].original_price))
 							// With Discount % to show in app (19%) 10,33$ Per example
-							responseJSON[item].items[pElements].final_price = "(" + JSON.stringify(responseJSON[item].items[pElements].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON[item].items[pElements].final_price))
+							if (responseJSON[item].name != "Top Sellers")
+								responseJSON[item].items[pElements].final_price = "(" + JSON.stringify(responseJSON[item].items[pElements].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON[item].items[pElements].final_price))
 							allSpecialsItemsJSON.push(responseJSON[item].items[pElements]);
 
 					}
