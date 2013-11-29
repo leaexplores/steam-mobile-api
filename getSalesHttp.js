@@ -30,8 +30,7 @@ function writeWholeJSON(str, res) {
 		var iCpt = 0;
 		var dailyDealJSON;
 
-
-			var allSpecialsItemsJSON = [];
+		var allSpecialsItemsJSON = [];
 		// Generate the specials in an new way !
 		// Get all the items with a discounted price and
 		// put them in the same JSONObject!
@@ -39,14 +38,12 @@ function writeWholeJSON(str, res) {
 		//try {
 			for (var item in responseJSON)
 			{
-				console.log(JSON.stringify(item))
 				if (responseJSON[item].hasOwnProperty("items"))
 				{
 					for (pElements in responseJSON[item].items)
 					{
 						if (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0")
 						{
-							console.log("Addding " + responseJSON[item].items[pElements].name);
 							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
 							allSpecialsItemsJSON.push(responseJSON[item].items[pElements]);
 					}
@@ -54,13 +51,10 @@ function writeWholeJSON(str, res) {
 					}
 				}
 			}
-			console.log(allSpecialsItemsJSON.length)
+
 		var allSpecialsJSON = {
 			"items": allSpecialsItemsJSON	
 		};
-
-		//} catch (err) {console.log("La generation all specials a crashed")}
-
 
 		try {
 		while (responseJSON[iCpt].name != "Daily Deal") {
