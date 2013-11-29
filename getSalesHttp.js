@@ -29,6 +29,38 @@ function writeWholeJSON(str, res) {
 		// Finding the daily deal as there is a lot of sales!!
 		var iCpt = 0;
 		var dailyDealJSON;
+
+
+		var allSpecialsJSON = {
+			"items": allSpecialsItemsJSON	
+		};
+		var allSpecialsItemsJSON = [];
+		// Generate the specials in an new way !
+		// Get all the items with a discounted price and
+		// put them in the same JSONObject!
+		var nbItemsAllSpecialsJSON = 0;
+		//try {
+			for (var item in responseJSON)
+			{
+				console.log(JSON.stringify(item))
+				if (responseJSON[item].hasOwnProperty("items"))
+				{
+					for (pElements in responseJSON[item].items)
+					{
+						if (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0")
+						{
+							console.log("Addding " + responseJSON[item].items[pElements].name);
+							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
+							allSpecialsItemsJSON.push(responseJSON[item].items[pElements]);
+					}
+
+					}
+				}
+			}
+
+		//} catch (err) {console.log("La generation all specials a crashed")}
+
+
 		try {
 		while (responseJSON[iCpt].name != "Daily Deal") {
 		iCpt = iCpt + 1;
@@ -74,7 +106,7 @@ function writeWholeJSON(str, res) {
 		// Build the JSON Object	
 		var dealsJSON = {
 			"dailyDeal": dailyDealJSON,
-			"specials": responseJSON.specials,
+			"specials": allSpecialsJSON, //responseJSON.specials,
 			"most_popular" : responseJSON.top_sellers
 		};
 		res.writeHead(200, {
