@@ -29,7 +29,7 @@ function writeWholeJSON(str, res) {
 		// Finding the daily deal as there is a lot of sales!!
 		var iCpt = 0;
 		var dailyDealJSON;
-
+		var itemToDeal;
 		var allSpecialsItemsJSON = [];
 		// Generate the specials in an new way !
 		// Get all the items with a discounted price and
@@ -42,15 +42,16 @@ function writeWholeJSON(str, res) {
 				{
 					for (pElements in responseJSON[item].items)
 					{
-						if (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0")
+						if (responseJSON[item].items[pElements].hasOwnProperty("discount_percent") && (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0" || JSON.stringify(responseJSON[item].items[pElements].discounted) != "true"))
 						{
 							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
 							// Add , and $ to the prices.
-						        responseJSON[item].items[pElements].original_price = formatPrice(JSON.stringify(responseJSON[item].items[pElements].original_price))
+							itemToDeal = responseJSON[item].items[pElements];
+						        itemToDeal.original_price = formatPrice(JSON.stringify(itemToDeal.original_price));
 							// With Discount % to show in app (19%) 10,33$ Per example
 							if (responseJSON[item].name != "Top Sellers")
-								responseJSON[item].items[pElements].final_price = "(" + JSON.stringify(responseJSON[item].items[pElements].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON[item].items[pElements].final_price))
-							allSpecialsItemsJSON.push(responseJSON[item].items[pElements]);
+								itemToDeal.final_price = "(" + JSON.stringify(itemToDeal.discount_percent) + "%) " + formatPrice(JSON.stringify(itemToDeal.final_price))
+							allSpecialsItemsJSON.push(itemToDeal);
 
 					}
 
@@ -244,4 +245,4 @@ http.get(options, function (response) {
 });
 });
 
-server.listen(8080);
+server.listen(8081);
