@@ -22,6 +22,19 @@ function formatPrice(strPrice)
 	return strPrice.substr(0,strPrice.length -2) + "," + strPrice.substr(strPrice.length - 2) + "$";
 }
 
+// Function that check if the item is already in JSON array.
+// Return true if already there!
+function checkInArray(pArray, pName) {
+	var alreadyPresent;
+	alreadyPresent = false;
+	for (var cItem in pArray)
+	{
+		if (pArray[cItem].hasOwnProperty("name") && JSON.stringify(pArray[cItem].name) == pName)
+			alreadyPresent = true;
+	}
+	return alreadyPresent;
+}
+
 function writeWholeJSON(str, res) {
 			var responseJSON;
 		// Parse my JSON bro.
@@ -43,7 +56,8 @@ function writeWholeJSON(str, res) {
 					for (pElements in responseJSON[item].items)
 					{
 						itemToDeal = responseJSON[item].items[pElements];
-						if (itemToDeal.hasOwnProperty("discount_percent") && (JSON.stringify(itemToDeal.discount_percent) != "0" || JSON.stringify(itemToDeal.discounted) != "true") && JSON.stringify(itemToDeal.original_price) != "null")
+						
+						if (!checkInArray(allSpecialsItemsJSON, JSON.stringify(itemToDeal.name)) && itemToDeal.hasOwnProperty("discount_percent") && (JSON.stringify(itemToDeal.discount_percent) != "0" || JSON.stringify(itemToDeal.discounted) != "true") && JSON.stringify(itemToDeal.original_price) != "null")
 						{
 							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
 							// Add , and $ to the prices.
@@ -52,9 +66,7 @@ function writeWholeJSON(str, res) {
 							if (responseJSON[item].name != "Top Sellers")
 								itemToDeal.final_price = "(" + JSON.stringify(itemToDeal.discount_percent) + "%) " + formatPrice(JSON.stringify(itemToDeal.final_price))
 							allSpecialsItemsJSON.push(itemToDeal);
-
-					}
-
+						}
 					}
 				}
 			}
