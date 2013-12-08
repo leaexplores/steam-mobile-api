@@ -78,7 +78,7 @@ function writeWholeJSON(str, res) {
 		// Correct the prices provided by steam.
 		// Formatting 4099 to 40,99$  per example.
 		// With Discount % to show in app (19%) 10,33$ Per example
-		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
+		//dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 	} catch (err) {}
 
 	try {
