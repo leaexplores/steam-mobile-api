@@ -42,11 +42,11 @@ function writeWholeJSON(str, res) {
 				{
 					for (pElements in responseJSON[item].items)
 					{
-						if (responseJSON[item].items[pElements].hasOwnProperty("discount_percent") && (JSON.stringify(responseJSON[item].items[pElements].discount_percent) != "0" || JSON.stringify(responseJSON[item].items[pElements].discounted) != "true"))
+						itemToDeal = responseJSON[item].items[pElements];
+						if (itemToDeal.hasOwnProperty("discount_percent") && (JSON.stringify(itemToDeal.discount_percent) != "0" || JSON.stringify(itemToDeal.discounted) != "true") && JSON.stringify(itemToDeal.original_price) != "null")
 						{
 							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
 							// Add , and $ to the prices.
-							itemToDeal = responseJSON[item].items[pElements];
 						        itemToDeal.original_price = formatPrice(JSON.stringify(itemToDeal.original_price));
 							// With Discount % to show in app (19%) 10,33$ Per example
 							if (responseJSON[item].name != "Top Sellers")
