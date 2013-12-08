@@ -17,9 +17,8 @@ Copyright (C) 2013  Mathieu Rhéaume <mathieu@codingrhemes.com>
 */
 
 // Functions that are used by the app.
-function formatPrice(strPrice)
-{
-	return strPrice.substr(0,strPrice.length -2) + "," + strPrice.substr(strPrice.length - 2) + "$";
+function formatPrice(strPrice) {
+	return strPrice.substr(0, strPrice.length - 2) + "," + strPrice.substr(strPrice.length - 2) + "$";
 }
 
 // Function that check if the item is already in JSON array.
@@ -27,8 +26,7 @@ function formatPrice(strPrice)
 function checkInArray(pArray, pName) {
 	var alreadyPresent;
 	alreadyPresent = false;
-	for (var cItem in pArray)
-	{
+	for (var cItem in pArray) {
 		if (pArray[cItem].hasOwnProperty("name") && JSON.stringify(pArray[cItem].name) == pName)
 			alreadyPresent = true;
 	}
@@ -36,157 +34,149 @@ function checkInArray(pArray, pName) {
 }
 
 function writeWholeJSON(str, res) {
-			var responseJSON;
-		// Parse my JSON bro.
-		responseJSON = JSON.parse(str);
-		// Finding the daily deal as there is a lot of sales!!
-		var iCpt = 0;
-		var dailyDealJSON;
-		var itemToDeal;
-		var allSpecialsItemsJSON = [];
-		// Generate the specials in an new way !
-		// Get all the items with a discounted price and
-		// put them in the same JSONObject!
-		var nbItemsAllSpecialsJSON = 0;
-		try {
-			for (var item in responseJSON)
-			{
-				if (responseJSON[item].hasOwnProperty("items"))
-				{
-					for (pElements in responseJSON[item].items)
-					{
-						itemToDeal = responseJSON[item].items[pElements];
-						
-						if (!checkInArray(allSpecialsItemsJSON, JSON.stringify(itemToDeal.name)) && itemToDeal.hasOwnProperty("discount_percent") && (JSON.stringify(itemToDeal.discount_percent) != "0" || JSON.stringify(itemToDeal.discounted) != "true") && JSON.stringify(itemToDeal.original_price) != "null")
-						{
-							nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
-							// Add , and $ to the prices.
-						        itemToDeal.original_price = formatPrice(JSON.stringify(itemToDeal.original_price));
-							// With Discount % to show in app (19%) 10,33$ Per example
-							if (responseJSON[item].name != "Top Sellers")
-								itemToDeal.final_price = "(" + JSON.stringify(itemToDeal.discount_percent) + "%) " + formatPrice(JSON.stringify(itemToDeal.final_price))
-							allSpecialsItemsJSON.push(itemToDeal);
-						}
+	var responseJSON;
+	// Parse my JSON bro.
+	responseJSON = JSON.parse(str);
+	// Finding the daily deal as there is a lot of sales!!
+	var iCpt = 0;
+	var dailyDealJSON;
+	var itemToDeal;
+	var allSpecialsItemsJSON = [];
+	// Generate the specials in an new way !
+	// Get all the items with a discounted price and
+	// put them in the same JSONObject!
+	var nbItemsAllSpecialsJSON = 0;
+	try {
+		for (var item in responseJSON) {
+			if (responseJSON[item].hasOwnProperty("items")) {
+				for (pElements in responseJSON[item].items) {
+					itemToDeal = responseJSON[item].items[pElements];
+
+					if (!checkInArray(allSpecialsItemsJSON, JSON.stringify(itemToDeal.name)) && itemToDeal.hasOwnProperty("discount_percent") && JSON.stringify(itemToDeal.discount_percent) != "0" && JSON.stringify(itemToDeal.discounted) == "true" && JSON.stringify(itemToDeal.original_price) != "null") {
+						nbItemsAllSpecialsJSON = nbItemsAllSpecialsJSON + 1;
+						// Add , and $ to the prices.
+						itemToDeal.original_price = formatPrice(JSON.stringify(itemToDeal.original_price));
+						// With Discount % to show in app (19%) 10,33$ Per example
+						if (responseJSON[item].name != "Top Sellers")
+							itemToDeal.final_price = "(" + JSON.stringify(itemToDeal.discount_percent) + "%) " + formatPrice(JSON.stringify(itemToDeal.final_price))
+						allSpecialsItemsJSON.push(itemToDeal);
 					}
 				}
 			}
 		}
-		catch (err) {}
+	} catch (err) {}
 
-		var allSpecialsJSON = {
-			"items": allSpecialsItemsJSON	
-		};
+	var allSpecialsJSON = {
+		"items": allSpecialsItemsJSON
+	};
 
-		try {
+	try {
 		while (responseJSON[iCpt].name != "Daily Deal") {
-		iCpt = iCpt + 1;
+			iCpt = iCpt + 1;
 		}
 		dailyDealJSON = responseJSON[iCpt];
 		// Correct the prices provided by steam.
 		// Formatting 4099 to 40,99$  per example.
 		// With Discount % to show in app (19%) 10,33$ Per example
 		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
-		} catch (err) {}
+	} catch (err) {}
 
-		try {
+	try {
 		// Format for most popular
-				// Format prices and compute discounted price in Specials
-		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
-		{
-		// Add % to the discounted prices
-		//responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
-		// Add , and $ to the prices.
-		responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
-		// With Discount % to show in app (19%) 10,33$ Per example
-		if (JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) != "0")
-			responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
-		else
-			responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+		// Format prices and compute discounted price in Specials
+		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++) {
+			// Add % to the discounted prices
+			//responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
+			// Add , and $ to the prices.
+			responseJSON.top_sellers.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].original_price))
+			// With Discount % to show in app (19%) 10,33$ Per example
+			if (JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) != "0")
+				responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
+			else
+				responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		}
-		} catch (err) {}
+	} catch (err) {}
 
-		// Build the JSON Object	
-		var dealsJSON = {
-			"dailyDeal": dailyDealJSON,
-			"specials": allSpecialsJSON, //responseJSON.specials,
-			"most_popular" : responseJSON.top_sellers
-		};
-		res.writeHead(200, {
-				"Content-Type": "application/json"
-				});
+	// Build the JSON Object	
+	var dealsJSON = {
+		"dailyDeal": dailyDealJSON,
+		"specials": allSpecialsJSON, //responseJSON.specials,
+		"most_popular": responseJSON.top_sellers
+	};
+	res.writeHead(200, {
+		"Content-Type": "application/json"
+	});
 
-		res.write(JSON.stringify(dealsJSON));
-		res.end();
+	res.write(JSON.stringify(dealsJSON));
+	res.end();
 }
 
 function writeDailyDealJSON(str, res) {
-			var responseJSON;
-		// Parse my JSON bro.
-		responseJSON = JSON.parse(str);
-		// Finding the daily deal as there is a lot of sales!!
-		var iCpt = 0;
-		var dailyDealJSON;
-		while (responseJSON[iCpt].name != "Daily Deal") {
+	var responseJSON;
+	// Parse my JSON bro.
+	responseJSON = JSON.parse(str);
+	// Finding the daily deal as there is a lot of sales!!
+	var iCpt = 0;
+	var dailyDealJSON;
+	while (responseJSON[iCpt].name != "Daily Deal") {
 		iCpt = iCpt + 1;
-		}
-		dailyDealJSON = responseJSON[iCpt];
-		// Correct the prices provided by steam.
-		// Formatting 4099 to 40,99$  per example.
-		dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
+	}
+	dailyDealJSON = responseJSON[iCpt];
+	// Correct the prices provided by steam.
+	// Formatting 4099 to 40,99$  per example.
+	dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 
-		// Build the JSON Object	
-		var dealsJSON = {
-			"dailyDeal": dailyDealJSON,
-		};
-		res.writeHead(200, {
-				"Content-Type": "application/json"
-				});
+	// Build the JSON Object	
+	var dealsJSON = {
+		"dailyDeal": dailyDealJSON,
+	};
+	res.writeHead(200, {
+		"Content-Type": "application/json"
+	});
 
-		res.write(JSON.stringify(dealsJSON));
-		res.end();
+	res.write(JSON.stringify(dealsJSON));
+	res.end();
 }
 
 
 function writeSpecialsJSON(str, res) {
-			var responseJSON;
-		// Parse my JSON bro.
-		responseJSON = JSON.parse(str);
-		// Finding the daily deal as there is a lot of sales!!
-		var iCpt = 0;
+	var responseJSON;
+	// Parse my JSON bro.
+	responseJSON = JSON.parse(str);
+	// Finding the daily deal as there is a lot of sales!!
+	var iCpt = 0;
 
-		// Format prices and compute discounted price in Specials
-		for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++)
-		{
+	// Format prices and compute discounted price in Specials
+	for (iCpt = 0; iCpt < responseJSON.specials.items.length; iCpt++) {
 		// Add % to the discounted prices
 		//responseJSON.specials.items[iCpt].discount_percent = JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
 		responseJSON.specials.items[iCpt].original_price = formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].original_price))
 		// With Discount % to show in app (19%) 10,33$ Per example
 		responseJSON.specials.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.specials.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.specials.items[iCpt].final_price))
-		}
+	}
 
-		// Build the JSON Object	
-		var dealsJSON = {
-			"specials": responseJSON.specials
-		};
-		res.writeHead(200, {
-				"Content-Type": "application/json"
-				});
+	// Build the JSON Object	
+	var dealsJSON = {
+		"specials": responseJSON.specials
+	};
+	res.writeHead(200, {
+		"Content-Type": "application/json"
+	});
 
-		res.write(JSON.stringify(dealsJSON));
-		res.end();
+	res.write(JSON.stringify(dealsJSON));
+	res.end();
 }
 
-function writeMostPopularJSON(str,res) {
-			var responseJSON;
-		// Parse my JSON bro.
-		responseJSON = JSON.parse(str);
-		// Finding the daily deal as there is a lot of sales!!
-		var iCpt = 0;
+function writeMostPopularJSON(str, res) {
+	var responseJSON;
+	// Parse my JSON bro.
+	responseJSON = JSON.parse(str);
+	// Finding the daily deal as there is a lot of sales!!
+	var iCpt = 0;
 
-		// Format prices and compute discounted price in Specials
-		for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++)
-		{
+	// Format prices and compute discounted price in Specials
+	for (iCpt = 0; iCpt < responseJSON.top_sellers.items.length; iCpt++) {
 		// Add % to the discounted prices
 		//responseJSON.top_sellers.items[iCpt].discount_percent = JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%"
 		// Add , and $ to the prices.
@@ -196,65 +186,65 @@ function writeMostPopularJSON(str,res) {
 			responseJSON.top_sellers.items[iCpt].final_price = "(" + JSON.stringify(responseJSON.top_sellers.items[iCpt].discount_percent) + "%) " + formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
 		else
 			responseJSON.top_sellers.items[iCpt].final_price = formatPrice(JSON.stringify(responseJSON.top_sellers.items[iCpt].final_price))
-		}
+	}
 
-		// Build the JSON Object	
-		var dealsJSON = {
-			"most_popular": responseJSON.top_sellers
-		};
-		res.writeHead(200, {
-				"Content-Type": "application/json"
-				});
+	// Build the JSON Object	
+	var dealsJSON = {
+		"most_popular": responseJSON.top_sellers
+	};
+	res.writeHead(200, {
+		"Content-Type": "application/json"
+	});
 
-		res.write(JSON.stringify(dealsJSON));
-		res.end();
+	res.write(JSON.stringify(dealsJSON));
+	res.end();
 }
 
 // Main program!
 var http = require('http');
-var url = require ('url');
+var url = require('url');
 
-var server = http.createServer(function (req, res) {
-		// Original Steam API URL.
-		var options = {
-host: 'store.steampowered.com',
-path: '/api/featuredcategories'
-};
+var server = http.createServer(function(req, res) {
+	// Original Steam API URL.
+	var options = {
+		host: 'store.steampowered.com',
+		path: '/api/featuredcategories'
+	};
 
-http.get(options, function (response) {
-	var str = '';
+	http.get(options, function(response) {
+		var str = '';
 
-	//another chunk of data has been recieved, so append it to `str`
-	response.on('data', function (chunk) {
-		str += chunk;
+		//another chunk of data has been recieved, so append it to `str`
+		response.on('data', function(chunk) {
+			str += chunk;
 		});
 
-	//the whole response has been recieved!
-	response.on('end', function () {
-		var url_parts = url.parse(req.url);
-		// Rooting meh I don't need a lib for that !
-		switch(url_parts.pathname) {
-			case '/':
-				writeWholeJSON(str,res);
-				break;
-			case '/dailydeal':
-				writeDailyDealJSON(str, res);
-				break;
-			case '/special':
-				writeSpecialsJSON(str, res);
-			break;
-			case '/mostpopular':
-				writeMostPopularJSON(str,res);
-			break;
-			default:
-				res.write('Too bad 404');
-				res.end();
-		}
+		//the whole response has been recieved!
+		response.on('end', function() {
+			var url_parts = url.parse(req.url);
+			// Rooting meh I don't need a lib for that !
+			switch (url_parts.pathname) {
+				case '/':
+					writeWholeJSON(str, res);
+					break;
+				case '/dailydeal':
+					writeDailyDealJSON(str, res);
+					break;
+				case '/special':
+					writeSpecialsJSON(str, res);
+					break;
+				case '/mostpopular':
+					writeMostPopularJSON(str, res);
+					break;
+				default:
+					res.write('Too bad 404');
+					res.end();
+			}
+
+		});
+
 
 	});
-
-
-});
 });
 
 server.listen(8081);
