@@ -81,6 +81,15 @@ function writeWholeJSON(str, res) {
 		//dailyDealJSON.items[0].final_price = "(" + JSON.stringify(dailyDealJSON.items[0].discount_percent) + "%) " + formatPrice(JSON.stringify(dailyDealJSON.items[0].final_price));
 	} catch (err) {}
 
+// Verify if daily deal was found else return a not found item.
+if (dailyDealJSON == null)
+	dailyDealJSON = {
+		"items": [{
+			"final_price": " ",
+			"discount_percent": " ",
+			"name": "Daily Deal Not Active in steam store."
+		} ]
+	}
 	try {
 		// Format for most popular
 		// Format prices and compute discounted price in Specials
